@@ -14,7 +14,7 @@ import { Plus } from 'lucide-react'
 
 const mockTestSchema = z.object({
   exam_name: z.string().min(2, "Exam name is required"),
-  score: z.coerce.number().min(0, "Score cannot be negative"), // coerce converts string to number automatically
+  score: z.coerce.number().min(0, "Score cannot be negative"), // coerce converts string to number
   total_marks: z.coerce.number().min(1, "Total marks must be > 0"),
   accuracy: z.coerce.number().min(0).max(100, "Accuracy must be between 0-100"),
   time_taken_minutes: z.coerce.number().min(1, "Time must be > 0"),
@@ -27,7 +27,8 @@ export function AddMockTestDialog() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const form = useForm<MockTestFormValues>({
-    resolver: zodResolver(mockTestSchema),
+    // FIX: Add 'as any' here to resolve the TypeScript coercion mismatch
+    resolver: zodResolver(mockTestSchema) as any, 
     defaultValues: { exam_name: '', score: 0, total_marks: 100, accuracy: 80, time_taken_minutes: 60 },
   })
 
